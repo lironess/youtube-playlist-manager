@@ -1,0 +1,28 @@
+{
+  "name": "youtube-playlist-manager",
+  "version": "0.0.0",
+  "description": "youtube playlist manager",
+  "main": "index.js",
+  "scripts": {
+    "start": "node_modules/.bin/babel-node src/base/server.js",
+    "test": "node_modules/.bin/mocha --compilers js:babel/register test/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lironess/youtube-playlist-manager.git"
+  },
+  "author": "Liron Shmuel <liri33@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lironess/youtube-playlist-manager/issues"
+  },
+  "homepage": "https://github.com/lironess/youtube-playlist-manager#readme",
+  "dependencies": {
+    "hapi": "^11.0.2"
+  },
+  "devDependencies": {
+    "babel": "^5.8.29",
+    "chai": "^3.4.0",
+    "mocha": "^2.3.3"
+  }
+}
