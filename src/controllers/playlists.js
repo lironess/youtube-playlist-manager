@@ -15,7 +15,7 @@ export default {
     }
   },
   getOne: {
-    validate: { params: { name: Joi.string() } },
+    validate: { params: { name: Joi.string().required() } },
     handler: (request, reply) => {
       Db.getPlaylist(request.params.name, (error, playlists) => {
         if (error) {
@@ -29,9 +29,9 @@ export default {
     }
   },
   create: {
-    validate: { params: { name: Joi.string() } },
+    validate: { payload: { name: Joi.string().required() } },
     handler: (request, reply) => {
-      Db.createPlaylist(request.params.name, (error) => {
+      Db.createPlaylist(request.payload.name, (error) => {
         if (error && error.code === 11000) {
           return reply(Boom.badRequest('There is a playlist with this name'));
         }
