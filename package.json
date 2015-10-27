@@ -19,7 +19,10 @@
   "homepage": "https://github.com/lironess/youtube-playlist-manager#readme",
   "dependencies": {
     "babel": "^5.8.29",
-    "hapi": "^11.0.2"
+    "boom": "^2.10.0",
+    "hapi": "^11.0.2",
+    "joi": "^6.9.1",
+    "mongoose": "^4.2.3"
   },
   "devDependencies": {
     "chai": "^3.4.0",
