@@ -22,13 +22,10 @@ export default {
         if (error) {
           return reply(Boom.badImplementation(error));
         }
-        if (playlist.length === 0) {
+        if (!playlist) {
           return reply(Boom.notFound('No such playlist'));
         }
-        if (!playlist.nowPlaying) {
-          playlist.nowPlaying = null;
-        }
-        reply(playlist);
+        reply(reformatPlaylist(playlist));
       });
     }
   },
@@ -61,3 +58,15 @@ export default {
     }
   },
 };
+
+function reformatPlaylist(playlist) {
+  playlist = playlist.toObject();
+  if (!playlist.nowPlaying) {
+    playlist.nowPlaying = null;
+  }
+  playlist.songs.forEach((song) => {
+    song.id = song._id;
+    delete song._id;
+  });
+  return playlist;
+}
