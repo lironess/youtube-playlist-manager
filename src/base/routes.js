@@ -22,7 +22,12 @@ export default {
     {
       method: 'POST',
       path: '/playlists',
-      config: Playlists.create
+      config: Playlists.createPlaylist
+    },
+    {
+      method: 'POST',
+      path: '/playlists/{name}',
+      config: Playlists.createSong
     }
   ]
 };

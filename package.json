@@ -22,7 +22,9 @@
     "boom": "^2.10.0",
     "hapi": "^11.0.2",
     "joi": "^6.9.1",
-    "mongoose": "^4.2.3"
+    "mongoose": "^4.2.3",
+    "request": "^2.65.0",
+    "youtube-url": "^0.2.1"
   },
   "devDependencies": {
     "chai": "^3.4.0",

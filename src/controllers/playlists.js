@@ -1,6 +1,7 @@
 import Joi from 'joi';
-import Db from './db';
 import Boom from 'boom';
+import Db from './db';
+import Youtube from './youtube';
 
 export default {
   getAll: {
@@ -9,7 +10,7 @@ export default {
         if (error) {
           reply(Boom.badImplementation(error));
         } else {
-          reply(playlists);
+          reply(playlists.map((playlist) => playlist._id));
         }
       });
     }
@@ -17,18 +18,21 @@ export default {
   getOne: {
     validate: { params: { name: Joi.string().required() } },
     handler: (request, reply) => {
-      Db.getPlaylist(request.params.name, (error, playlists) => {
+      Db.getPlaylist(request.params.name, (error, playlist) => {
         if (error) {
           return reply(Boom.badImplementation(error));
         }
-        if (playlists.length === 0) {
+        if (playlist.length === 0) {
           return reply(Boom.notFound('No such playlist'));
         }
-        reply(playlists);
+        if (!playlist.nowPlaying) {
+          playlist.nowPlaying = null;
+        }
+        reply(playlist);
       });
     }
   },
-  create: {
+  createPlaylist: {
     validate: { payload: { name: Joi.string().required() } },
     handler: (request, reply) => {
       Db.createPlaylist(request.payload.name, (error) => {
@@ -41,5 +45,19 @@ export default {
         reply('Success');
       });
     }
-  }
+  },
+  createSong: {
+    validate: {
+      params: { name: Joi.string().required() },
+      payload: { youtubeUrl: Joi.string().required() }
+    },
+    handler: (request, reply) => {
+      Youtube.getVideoInfo(request.payload.youtubeUrl, (error, videoData) => {
+        if (error) { reply(Boom.badRequest(error)); }
+        Db.addSong(request.params.name, videoData, (dbError) => {
+          return dbError ? reply(Boom.badImplementation(dbError)) : reply('Success');
+        });
+      });
+    }
+  },
 };

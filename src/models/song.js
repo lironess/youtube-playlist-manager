@@ -6,7 +6,7 @@ const schema = new Mongoose.Schema({
   description: String,
   thumbnailUrl: String,
   duration: Number,
-  vote: Number
+  votes: Number
 }, { versionKey: false });
 
 export default {
