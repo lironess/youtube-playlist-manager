@@ -18,10 +18,10 @@
   },
   "homepage": "https://github.com/lironess/youtube-playlist-manager#readme",
   "dependencies": {
+    "babel": "^5.8.29",
     "hapi": "^11.0.2"
   },
   "devDependencies": {
-    "babel": "^5.8.29",
     "chai": "^3.4.0",
     "mocha": "^2.3.3"
   }
