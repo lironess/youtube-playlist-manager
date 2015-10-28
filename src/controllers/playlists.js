@@ -18,11 +18,11 @@ export default {
     validate: { params: { name: Joi.string().required() } },
     handler: (request, reply) => {
       Db.getPlaylist(request.params.name, (error, playlist) => {
+        if (error && error.code === 400) {
+          return reply(Boom.badRequest(error.message));
+        }
         if (error) {
           return reply(Boom.badImplementation(error));
-        }
-        if (!playlist) {
-          return reply(Boom.notFound('No such playlist'));
         }
         reply(reformatPlaylist(playlist));
       });
@@ -45,7 +45,6 @@ export default {
 };
 
 function reformatPlaylist(playlist) {
-  playlist = playlist.toObject();
   if (!playlist.nowPlaying) {
     playlist.nowPlaying = null;
   }

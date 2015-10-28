@@ -10,21 +10,23 @@ function getPlaylists(callback) {
 }
 
 function getPlaylist(name, callback) {
-  Playlist.findOne({ _id: name }, { _id: 0 }, callback);
+  findOnePlaylist(name, (error, playlist) => {
+    if (playlist) {
+      playlist = playlist.toObject();
+      delete playlist._id;
+    }
+    callback(error, playlist);
+  });
 }
 
 function createPlaylist(name, callback) {
   const playlist = new Playlist({ _id: name });
-
   playlist.save(callback);
 }
 
 function addSong(playlistName, song, callback) {
-  Playlist.findOne({ _id: playlistName }, (error, playlist) => {
+  findOnePlaylist(playlistName, (error, playlist) => {
     if (error) { return callback(error); }
-    if(!playlist) {
-      return callback({ code: 400, message: 'No such playlist' });
-    }
     if (_.some(playlist.songs, { _id: song._id })) {
       return callback();
     }
@@ -33,4 +35,35 @@ function addSong(playlistName, song, callback) {
   });
 }
 
-export default { getPlaylists, getPlaylist, createPlaylist, addSong };
+function vote (playlistName, songId, number, callback) {
+  findOnePlaylist(playlistName, (error, playlist) => {
+    if (error) { return callback(error); }
+    const songIndex = _.findIndex(playlist.songs, { _id: songId });
+    if (songIndex >= 0) {
+      playlist.songs[songIndex].votes += number;
+      playlist.save(callback);
+    } else {
+      return callback({ code: 400, message: 'No such song'});
+    }
+  });
+}
+
+export default {
+  getPlaylists,
+  getPlaylist,
+  createPlaylist,
+  addSong,
+  vote
+};
+
+function findOnePlaylist (name, callback) {
+  Playlist.findOne({ _id: name }, (error, playlist) => {
+    if (error) {
+      return callback(error);
+    }
+    if (!playlist) {
+      return callback({ code: 400, message: 'No such playlist' });
+    }
+    callback(null, playlist);
+  });
+}

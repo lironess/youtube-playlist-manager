@@ -29,6 +29,16 @@ export default {
       method: 'POST',
       path: '/playlists/{name}',
       config: Song.create
+    },
+    {
+      method: 'POST',
+      path: '/playlists/{name}/up',
+      config: Song.voteUp
+    },
+    {
+      method: 'POST',
+      path: '/playlists/{name}/down',
+      config: Song.voteDown
     }
   ]
 };
