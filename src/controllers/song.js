@@ -49,4 +49,17 @@ export default {
       });
     }
   },
+  next: {
+    validate: {
+      params: { name: Joi.string().required() },
+    },
+    handler: (request, reply) => {
+      Db.nextSong(request.params.name, (error) => {
+        if (error && error.code === 400) {
+          return reply(Boom.badRequest(error.message));
+        }
+        return error ? reply(Boom.badImplementation(error)) : reply('Success');
+      });
+    }
+  }
 };

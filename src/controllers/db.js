@@ -48,12 +48,26 @@ function vote (playlistName, songId, number, callback) {
   });
 }
 
+function nextSong (playlistName, callback) {
+  findOnePlaylist(playlistName, (error, playlist) => {
+    if (error) { return callback(error); }
+    if(playlist.songs.length) {
+      playlist.songs = _.sortBy(playlist.songs, 'votes');
+      playlist.nowPlaying = playlist.songs.pop();
+    } else {
+      playlist.nowPlaying = {};
+    }
+    playlist.save(callback);
+  });
+}
+
 export default {
   getPlaylists,
   getPlaylist,
   createPlaylist,
   addSong,
-  vote
+  vote,
+  nextSong
 };
 
 function findOnePlaylist (name, callback) {
