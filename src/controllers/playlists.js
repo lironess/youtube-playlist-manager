@@ -1,7 +1,6 @@
 import Joi from 'joi';
 import Boom from 'boom';
 import Db from './db';
-import Youtube from './youtube';
 
 export default {
   getAll: {
@@ -29,7 +28,7 @@ export default {
       });
     }
   },
-  createPlaylist: {
+  create: {
     validate: { payload: { name: Joi.string().required() } },
     handler: (request, reply) => {
       Db.createPlaylist(request.payload.name, (error) => {
@@ -42,21 +41,7 @@ export default {
         reply('Success');
       });
     }
-  },
-  createSong: {
-    validate: {
-      params: { name: Joi.string().required() },
-      payload: { youtubeUrl: Joi.string().required() }
-    },
-    handler: (request, reply) => {
-      Youtube.getVideoInfo(request.payload.youtubeUrl, (error, videoData) => {
-        if (error) { reply(Boom.badRequest(error)); }
-        Db.addSong(request.params.name, videoData, (dbError) => {
-          return dbError ? reply(Boom.badImplementation(dbError)) : reply('Success');
-        });
-      });
-    }
-  },
+  }
 };
 
 function reformatPlaylist(playlist) {

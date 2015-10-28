@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import Mongoose from 'mongoose';
 import { model as Song } from '../models/song';
 import { model as Playlist } from '../models/playlist';
@@ -21,6 +22,12 @@ function createPlaylist(name, callback) {
 function addSong(playlistName, song, callback) {
   Playlist.findOne({ _id: playlistName }, (error, playlist) => {
     if (error) { return callback(error); }
+    if(!playlist) {
+      return callback({ code: 400, message: 'No such playlist' });
+    }
+    if (_.some(playlist.songs, { _id: song._id })) {
+      return callback();
+    }
     playlist.songs.push(new Song(song));
     playlist.save(callback);
   });

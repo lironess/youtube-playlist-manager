@@ -1,4 +1,5 @@
 import Playlists from '../controllers/playlists';
+import Song from '../controllers/song';
 
 export default {
   endpoints: [
@@ -22,12 +23,12 @@ export default {
     {
       method: 'POST',
       path: '/playlists',
-      config: Playlists.createPlaylist
+      config: Playlists.create
     },
     {
       method: 'POST',
       path: '/playlists/{name}',
-      config: Playlists.createSong
+      config: Song.create
     }
   ]
 };
